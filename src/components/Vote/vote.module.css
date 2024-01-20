@@ -1,0 +1,19 @@
+.wrapper {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 25px;
+}
+
+.voteBtn {
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 5px;
+  cursor: pointer;
+}
+.wrapperBtn {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+}

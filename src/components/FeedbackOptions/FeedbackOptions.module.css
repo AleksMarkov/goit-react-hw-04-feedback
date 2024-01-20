@@ -1,0 +1,6 @@
+.voteBtn {
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 5px;
+  cursor: pointer;
+}
