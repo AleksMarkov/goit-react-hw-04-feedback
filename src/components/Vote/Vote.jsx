@@ -1,76 +1,69 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import Section from 'components/Section/Section';
 import FeedbackOptions from '../FeedbackOptions/FeedbackOptions';
 import Statistics from '../Statistics/Statistics';
 
 import styles from './vote.module.css';
 
-class Vote extends Component {
-  static voteOptions = ['good', 'neutral', 'bad'];
+const voteOptions = ['good', 'neutral', 'bad'];
 
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
+const Vote = () => {
+  const [votes, setVotes] = useState({ good: 0, neutral: 0, bad: 0 });
 
-  countTotalFeedback() {
-    const { good, neutral, bad } = this.state;
+  const countTotalFeedback = () => {
+    const { good, neutral, bad } = votes;
     const total = good + neutral + bad;
     return total;
-  }
+  };
 
-  countPositiveFeedbackPercentage(keyName) {
-    const total = this.countTotalFeedback();
+  const countPositiveFeedbackPercentage = keyName => {
+    const total = countTotalFeedback();
     if (!total) {
       return 0;
     }
-    const value = this.state[keyName];
+    const value = votes[keyName];
     return Number(((value / total) * 100).toFixed(2));
-  }
-
-  onleaveFeedback = keyName => {
-    this.setState(prevState => {
-      return {
-        [keyName]: prevState[keyName] + 1,
-      };
-    });
   };
 
-  render() {
-    const total = this.countTotalFeedback();
+  const onleaveFeedback = keyName => {
+    setVotes(prevVotes => ({
+      ...prevVotes,
+      [keyName]: prevVotes[keyName] + 1,
+    }));
+  };
 
-    const goodPercantage = this.countPositiveFeedbackPercentage('good');
-    const goodValue = this.state['good'];
-    const neutralValue = this.state['neutral'];
-    const badValue = this.state['bad'];
+  const total = countTotalFeedback();
 
-    return (
-      <div className={styles.wrapper}>
-        <Section title="Please leave feedback">
-          <div className={styles.wrapperBtn}>
-            <FeedbackOptions
-              options={Vote.voteOptions}
-              onleaveFeedback={this.onleaveFeedback}
-            />
-          </div>
-        </Section>
-        <Section title="Statistics">
-          {total === 0 ? (
-            'No feedback given'
-          ) : (
-            <Statistics
-              goodValue={goodValue}
-              neutralValue={neutralValue}
-              badValue={badValue}
-              goodPercantage={goodPercantage}
-              total={total}
-            />
-          )}
-        </Section>
-      </div>
-    );
-  }
-}
+  const goodPercantage = countPositiveFeedbackPercentage('good');
+  const goodValue = votes['good'];
+  const neutralValue = votes['neutral'];
+  const badValue = votes['bad'];
+
+  return (
+    <div className={styles.wrapper}>
+      <Section title="Please leave feedback">
+        <div className={styles.wrapperBtn}>
+          <FeedbackOptions
+            options={voteOptions}
+            onleaveFeedback={onleaveFeedback}
+          />
+        </div>
+      </Section>
+      <Section title="Statistics">
+        {total === 0 ? (
+          'No feedback given'
+        ) : (
+          <Statistics
+            goodValue={goodValue}
+            neutralValue={neutralValue}
+            badValue={badValue}
+            goodPercantage={goodPercantage}
+            total={total}
+          />
+        )}
+      </Section>
+    </div>
+  );
+};
 
 export default Vote;
